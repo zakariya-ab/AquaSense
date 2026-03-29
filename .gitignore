@@ -1,0 +1,10 @@
+# Ignore zip archives
+*.zip
+
+# Ignore dependency directories
+node_modules/
+**/node_modules/
+
+# Optional common ignores
+.DS_Store
+.env
