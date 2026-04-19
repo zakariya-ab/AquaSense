@@ -40,8 +40,11 @@ const generateMoistureData = () => {
       id: `hour-${23 - i}`, // Unique identifier for React keys
     });
   }
+  // console.log(data)
   return data;
 };
+
+
 
 const generateWaterConsumption = () => {
   const days = [
@@ -60,6 +63,47 @@ const generateWaterConsumption = () => {
   }));
 };
 
+async function getData() {
+  try {
+    const response = await fetch('http://localhost:8000/readings/latest');
+    const data = await response.json();
+    return data
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+async function getPlant() {
+  try {
+    const response = await fetch('http://localhost:8000/get-plant');
+    const data = await response.json();
+    return data
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+async function controlPump(command) {
+  try {
+    const response = await fetch("http://localhost:8000/pump-control", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        command: command
+      })
+    });
+
+    const data = await response.json();
+    console.log(data);
+
+  } catch (error) {
+    console.error("Error:", error);
+  }
+}
+
+
 export function Dashboard() {
   const navigate = useNavigate();
   const { t } = useLanguage();
@@ -70,33 +114,77 @@ export function Dashboard() {
   const [systemOnline, setSystemOnline] = useState(true);
   const [moistureData] = useState(generateMoistureData());
   const [waterData] = useState(generateWaterConsumption());
+  // Add to your state
+const [plantType, setPlantType] = useState("tomate");
+
+// const plantOptions = [
+//   { value: "tomate",    label: "🍅 Tomato" },
+//   { value: "poivron",   label: "🫑 Bell Pepper" },
+//   { value: "courgette", label: "🥒 Zucchini" },
+//   { value: "laitue",    label: "🥬 Lettuce" },
+//   { value: "carotte",   label: "🥕 Carrot" },
+//   { value: "oignon",    label: "🧅 Onion" },
+//   { value: "pomme_de_terre", label: "🥔 Potato" },
+//   { value: "concombre", label: "🥒 Cucumber" },
+// ];
+const plantOptions = [
+  { value: "tomate",           key: "dashboard.plant.tomate" },
+  { value: "poivron",          key: "dashboard.plant.poivron" },
+  { value: "courgette",        key: "dashboard.plant.courgette" },
+  { value: "laitue",           key: "dashboard.plant.laitue" },
+  { value: "carotte",          key: "dashboard.plant.carotte" },
+  { value: "oignon",           key: "dashboard.plant.oignon" },
+  { value: "pomme_de_terre",   key: "dashboard.plant.pomme_de_terre" },
+  { value: "concombre",        key: "dashboard.plant.concombre" },
+];
 
   // Simulate real-time data updates
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentMoisture((prev) => {
-        const change = (Math.random() - 0.5) * 3;
-        return Math.max(30, Math.min(80, prev + change));
-      });
-      setAirTemp((prev) => {
-        const change = (Math.random() - 0.5) * 1;
-        return Math.max(20, Math.min(40, prev + change));
-      });
-      setHumidity((prev) => {
-        const change = (Math.random() - 0.5) * 2;
-        return Math.max(30, Math.min(70, prev + change));
-      });
-    }, 3000);
+    const fetchData = async () =>{
+      const data = await getData();
+      const plant = await getPlant();
+      console.log(plant)
+      setCurrentMoisture(data.soil_moisture);
+      setAirTemp(data.temperature);
+      setHumidity(data.air_humidity);
+      setPumpStatus(data.pump_status);
+      setPlantType(plant.plant_type);
+    }
+    // const interval = setInterval(() => {
+    //   setCurrentMoisture((prev) => {
+    //     const change = (Math.random() - 0.5) * 3;
+    //     return Math.max(30, Math.min(80, prev + change));
+    //   });
+    //   setAirTemp((prev) => {
+    //     const change = (Math.random() - 0.5) * 1;
+    //     return Math.max(20, Math.min(40, prev + change));
+    //   });
+    //   setHumidity((prev) => {
+    //     const change = (Math.random() - 0.5) * 2;
+    //     return Math.max(30, Math.min(70, prev + change));
+    //   });
+    // }, 3000);
 
-    return () => clearInterval(interval);
+    // return () => clearInterval(interval);
+    fetchData();
   }, []);
 
   const handleLogout = () => {
     navigate("/");
   };
 
+  const handlePlantChange = async (value: string) => {
+    setPlantType(value);
+    await fetch("http://localhost:8000/set-plant", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ plant_type: value }),
+    });
+  };
+
   const togglePump = () => {
     setPumpStatus(!pumpStatus);
+    controlPump(!pumpStatus);
   };
 
   const getMoistureColor = (moisture: number) => {
@@ -237,30 +325,37 @@ export function Dashboard() {
             className="bg-white rounded-xl shadow-md p-4 sm:p-6 border-l-4 sm:col-span-2 md:col-span-1"
             style={{ borderLeftColor: "#2ECC71" }}
           >
-            <div className="flex items-center justify-between mb-3 sm:mb-4">
-              <div className="flex items-center gap-2 sm:gap-3">
-                <div
-                  className="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center"
-                  style={{ backgroundColor: "#2ECC7120" }}
-                >
-                  <Calendar
-                    className="w-5 h-5 sm:w-6 sm:h-6"
-                    style={{ color: "#2ECC71" }}
-                  />
-                </div>
-                <div>
-                  <p className="text-xs sm:text-sm text-gray-500">
-                    {t("dashboard.todayDate")}
-                  </p>
-                  <p className="text-base sm:text-lg font-bold text-gray-900">
-                    March 26, 2026
-                  </p>
-                </div>
+            <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+              <div
+                className="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center"
+                style={{ backgroundColor: "#2ECC7120" }}
+              >
+                <span className="text-xl sm:text-2xl">🌱</span>
+              </div>
+              <div>
+                <p className="text-xs sm:text-sm text-gray-500">
+                  {t("dashboard.plantType")}
+                </p>
+                <p className="text-sm font-semibold text-gray-700">
+                  {t(plantOptions.find(p => p.value === plantType)?.key ?? "")}
+                </p>
               </div>
             </div>
-            <p className="text-xs text-gray-500">
-              {t("dashboard.systemTime")}{" "}
-              {new Date().toLocaleTimeString()}
+
+            <select
+              value={plantType}
+              onChange={(e) => handlePlantChange(e.target.value)}
+              className="w-full mt-1 px-3 py-2 rounded-lg border border-gray-200 text-sm text-gray-700 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#2ECC71] focus:border-transparent cursor-pointer"
+            >
+              {plantOptions.map((plant) => (
+                <option key={plant.value} value={plant.value}>
+                  {t(plant.key)}
+                </option>
+              ))}
+            </select>
+
+            <p className="text-xs text-gray-500 mt-2">
+              {t("dashboard.plantSelected")}
             </p>
           </div>
         </div>
