@@ -2,6 +2,9 @@ import { createBrowserRouter } from "react-router";
 import { LandingPage } from "./components/LandingPage";
 import { LoginPage } from "./components/LoginPage";
 import { Dashboard } from "./components/Dashboard";
+import { AIPage } from "./components/AIPage";
+import { HistoryPage } from "./components/HistoryPage";
+import { SettingsPage } from "./components/SettingsPage";
 
 export const router = createBrowserRouter([
   {
@@ -16,4 +19,15 @@ export const router = createBrowserRouter([
     path: "/dashboard",
     Component: Dashboard,
   },
+  { 
+    path: "/ai",
+    Component: AIPage
+  },
+  { 
+    path: "/history",
+    Component: HistoryPage 
+  },
+  { 
+    path: "/settings",
+    Component: SettingsPage },
 ]);

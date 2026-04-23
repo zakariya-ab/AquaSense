@@ -27,6 +27,7 @@ import {
 import logo from "../../assets/logo.png";
 import { useLanguage } from "../contexts/LanguageContext";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { NavBar } from "./NavBar";
 
 // Mock sensor data generator
 const generateMoistureData = () => {
@@ -257,6 +258,8 @@ const plantOptions = [
           </div>
         </div>
       </header>
+
+      <NavBar />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-8">
         {/* Weather Widget */}
@@ -497,7 +500,7 @@ const plantOptions = [
         {/* Charts */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
           {/* 24h Moisture Trend */}
-          <div className="bg-white rounded-xl shadow-md p-4 sm:p-6">
+          {/* <div className="bg-white rounded-xl shadow-md p-4 sm:p-6">
             <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
               <TrendingUp
                 className="w-5 h-5 sm:w-6 sm:h-6"
@@ -570,10 +573,10 @@ const plantOptions = [
             <p className="text-xs text-gray-500 text-center mt-3 sm:mt-4">
               {t("dashboard.historicalData")}
             </p>
-          </div>
+          </div> */}
 
           {/* Water Consumption */}
-          <div className="bg-white rounded-xl shadow-md p-4 sm:p-6">
+          {/* <div className="bg-white rounded-xl shadow-md p-4 sm:p-6">
             <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
               <Droplets
                 className="w-5 h-5 sm:w-6 sm:h-6"
@@ -626,11 +629,11 @@ const plantOptions = [
                 .toFixed(0)}{" "}
               {t("dashboard.liters")}
             </p>
-          </div>
+          </div> */}
         </div>
 
         {/* System Info Footer */}
-        <div className="mt-6 sm:mt-8 bg-white rounded-xl shadow-md p-4 sm:p-6">
+        {/* <div className="mt-6 sm:mt-8 bg-white rounded-xl shadow-md p-4 sm:p-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 text-center">
             <div>
               <p className="text-xs sm:text-sm text-gray-500 mb-1">
@@ -677,7 +680,8 @@ const plantOptions = [
               </p>
             </div>
           </div>
-        </div>
+        </div> */}
+
       </div>
     </div>
   );
