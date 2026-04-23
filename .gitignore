@@ -5,6 +5,14 @@
 node_modules/
 **/node_modules/
 
+# Ignore Python cache files
+**/__pycache__/
+*.py[cod]
+
+# Ignore PlatformIO and IoT editor build artifacts
+iot/.pio/
+iot/.vscode/
+
 # Optional common ignores
 .DS_Store
 .env

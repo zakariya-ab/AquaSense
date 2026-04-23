@@ -6,6 +6,14 @@
 L'objectif principal est de passer d'une irrigation manuelle basée sur l'estimation à une gestion précise basée sur des données réelles.
 
 ---
+## 📁 Structure du projet
+
+- `iot/` — Firmware ESP32 et projet PlatformIO pour les capteurs, la lecture DHT et le contrôle de la pompe.
+- `code_prj/backend/` — API FastAPI pour la collecte des données, la gestion de la base et le pilotage de la pompe.
+- `code_prj/data_analysis/` — Microservice IA et modèle de prédiction pour la décision d'irrigation.
+- `code_prj/frontend/` — Interface utilisateur React/Vite pour le tableau de bord et le contrôle.
+
+---
 <!-- 
 ## 🏗️ Architecture du Système
 [cite_start]Le projet repose sur une architecture multidisciplinaire divisée en quatre parties principales[cite: 29]:
