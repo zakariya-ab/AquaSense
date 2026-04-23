@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "editor": "wokwi",
+  "parts": [
+    { "type": "wokwi-breadboard-mini", "id": "bb1", "top": 289, "left": 27, "attrs": {} },
+    { "type": "board-esp32-devkit-c-v4", "id": "esp1", "top": 60, "left": 159.04, "attrs": {} },
+    { "type": "wokwi-potentiometer", "id": "pot1", "top": 97.1, "left": 10, "attrs": {} },
+    { "type": "wokwi-dht22", "id": "dht1", "top": 60.3, "left": 312, "attrs": {} },
+    { "type": "wokwi-relay-module", "id": "relay1", "top": 79.4, "left": 442.2, "attrs": {} },
+    {
+      "type": "wokwi-lcd1602",
+      "id": "lcd1",
+      "top": 229.6,
+      "left": 332.6,
+      "attrs": { "pins": "i2c" }
+    }
+  ],
+  "connections": [
+    [ "pot1:SIG", "esp1:34", "green", [ "v0" ] ],
+    [ "esp1:5V", "bb1:1t.a", "red", [ "h0" ] ],
+    [ "esp1:GND.1", "bb1:1t.b", "black", [ "h0" ] ],
+    [ "pot1:GND", "bb1:2t.b", "black", [ "v0" ] ],
+    [ "pot1:VCC", "bb1:2t.a", "red", [ "v0" ] ],
+    [ "dht1:VCC", "bb1:10t.a", "red", [ "v0" ] ],
+    [ "dht1:GND", "bb1:10t.b", "black", [ "v0" ] ],
+    [ "relay1:VCC", "bb1:9t.a", "red", [ "h0" ] ],
+    [ "relay1:GND", "bb1:9t.b", "black", [ "h0" ] ],
+    [ "dht1:SDA", "esp1:4", "green", [ "v0" ] ],
+    [ "relay1:IN", "esp1:2", "green", [ "h0" ] ],
+    [ "lcd1:GND", "bb1:8t.b", "black", [ "h0" ] ],
+    [ "lcd1:VCC", "bb1:7t.a", "red", [ "h0" ] ],
+    [ "lcd1:SDA", "esp1:21", "green", [ "h0" ] ],
+    [ "lcd1:SCL", "esp1:22", "green", [ "h0" ] ]
+  ],
+  "dependencies": {}
+}
